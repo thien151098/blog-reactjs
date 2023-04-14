@@ -3,6 +3,8 @@ import Home from './components/pages/Home';
 import Blog from './components/pages/Blog';
 import Blog2 from './components/pages/Blog2';
 import { publicRoutes } from './routes';
+import { DefaultLayout } from './components/Layout';
+import { Fragment } from 'react';
 
 function App() {
     return (
@@ -12,7 +14,25 @@ function App() {
                     {publicRoutes.map((route, index) => {
                         const Page = route.component;
 
-                        return <Route key={index} path={route.path} element={<Page />} />;
+                        let Layout = DefaultLayout;
+
+                        if (route.layout) {
+                            Layout = route.layout;
+                        } else if (route.layout === null) {
+                            Layout = Fragment;
+                        }
+
+                        return (
+                            <Route
+                                key={index}
+                                path={route.path}
+                                element={
+                                    <Layout>
+                                        <Page />
+                                    </Layout>
+                                }
+                            />
+                        );
                     })}
                 </Routes>
             </div>
